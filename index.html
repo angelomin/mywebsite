@@ -20,10 +20,14 @@
         h1 {
             font-size: 2.5em;
             margin-bottom: 0.5em;
+            border-bottom: 2px solid #e67e22;
+            padding-bottom: 10px;
         }
         h2 {
             font-size: 1.8em;
             margin-top: 1.5em;
+            border-bottom: 1px solid #e67e22;
+            padding-bottom: 5px;
         }
         p, ul {
             margin-bottom: 1.5em;
@@ -35,20 +39,32 @@
             color: #7f8c8d;
             font-size: 0.9em;
         }
+        .accent {
+            color: #e67e22;
+        }
+        .divider {
+            height: 1px;
+            background-color: #e67e22;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to my corner of the internet</h1>
+    <h1>Angelo's Internet Corner</h1>
     
-    <p>Hello, world! This is my corner of the internet.</p>
+    <p>Hello, world!</p>
+    
+    <div class="divider"></div>
     
     <h2>My Interests</h2>
     <ul>
-        <li>Crypto</li>
-        <li>Space</li>
+        <li><span class="accent">Crypto</span></li>
+        <li><span class="accent">Space</span></li>
     </ul>
     
-    <p>Don't email me, find me onchain</p>
+    <div class="divider"></div>
+    
+    <p>Don't email me, find me <span class="accent">onchain</span></p>
     
     <p class="subtle">Last updated: <script>document.write(new Date().toLocaleDateString());</script></p>
 </body>
