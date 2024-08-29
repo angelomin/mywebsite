@@ -83,6 +83,38 @@
         a:hover {
             text-decoration: underline;
         }
+
+        textarea#messageInput {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid var(--text-color);
+            border-radius: 5px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        #sendMessageButton {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .reminder {
+            color: var(--accent-color);
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        #charCount {
+            text-align: right;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script src="https://unpkg.com/web3modal@1.9.0/dist/index.js"></script>
@@ -103,6 +135,13 @@
     </ul>
     
     <p>Find me <span class="accent"><a href="https://etherscan.io/" target="_blank" rel="noopener noreferrer">onchain</a></span>.</p>
+
+    <!-- Update the HTML structure for the message input and send button -->
+    <h2>Send me an onchain message</h2>
+    <p id="walletReminder" class="reminder">Please connect your wallet to send a message.</p>
+    <textarea id="messageInput" placeholder="Enter your message (max 240 characters)" maxlength="240" disabled></textarea>
+    <div id="charCount">0 / 240</div>
+    <button id="sendMessageButton" class="connect-button" disabled>Send Message</button>
 
     <script>
         let web3Modal;
@@ -160,8 +199,19 @@
         function enableMessageInput() {
             const messageInput = document.querySelector("#messageInput");
             const sendMessageButton = document.querySelector("#sendMessageButton");
+            const walletReminder = document.querySelector("#walletReminder");
             messageInput.disabled = false;
             sendMessageButton.disabled = false;
+            walletReminder.style.display = 'none';
+            
+            // Add event listener for character count
+            messageInput.addEventListener('input', updateCharCount);
+        }
+
+        function updateCharCount() {
+            const messageInput = document.querySelector("#messageInput");
+            const charCount = document.querySelector("#charCount");
+            charCount.textContent = `${messageInput.value.length} / 240`;
         }
 
         async function sendMessage() {
