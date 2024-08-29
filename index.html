@@ -64,7 +64,7 @@
     <script src="https://unpkg.com/web3modal@1.9.0/dist/index.js"></script>
 </head>
 <body>
-    <h1>Welcome to my corner of the internet</h1>
+    <h1>Angelo's Corner of Web3</h1>
     
     <button id="connectButton" class="connect-button">Connect Wallet</button>
     
@@ -90,11 +90,13 @@
         let selectedAccount;
 
         window.addEventListener('load', async () => {
+            console.log("Page loaded");
             init();
             document.querySelector("#connectButton").addEventListener("click", connectWallet);
         });
 
         function init() {
+            console.log("Initializing Web3Modal");
             const providerOptions = {};
 
             web3Modal = new Web3Modal({
@@ -102,34 +104,38 @@
                 cacheProvider: false, // optional
                 providerOptions // required
             });
+            console.log("Web3Modal initialized");
         }
 
         async function connectWallet() {
+            console.log("Connect button clicked");
             try {
                 provider = await web3Modal.connect();
+                console.log("Provider connected:", provider);
                 const web3 = new Web3(provider);
                 const accounts = await web3.eth.getAccounts();
                 selectedAccount = accounts[0];
                 document.querySelector("#connectButton").textContent = `Connected: ${selectedAccount.slice(0,6)}...${selectedAccount.slice(-4)}`;
             } catch(e) {
-                console.log("Could not get a wallet connection", e);
+                console.error("Could not get a wallet connection", e);
                 return;
             }
 
             // Subscribe to accounts change
             provider.on("accountsChanged", (accounts) => {
+                console.log("Accounts changed:", accounts);
                 selectedAccount = accounts[0];
                 document.querySelector("#connectButton").textContent = `Connected: ${selectedAccount.slice(0,6)}...${selectedAccount.slice(-4)}`;
             });
 
             // Subscribe to chainId change
             provider.on("chainChanged", (chainId) => {
-                console.log(chainId);
+                console.log("Chain changed:", chainId);
             });
 
             // Subscribe to provider disconnection
             provider.on("disconnect", (error) => {
-                console.log(error);
+                console.log("Provider disconnected:", error);
                 document.querySelector("#connectButton").textContent = "Connect Wallet";
             });
         }
