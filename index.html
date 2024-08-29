@@ -3,96 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Angelo's Website</title>
+    <title>Angelo's Web3 Corner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #f4f1de;
+            --text-color: #3d405b;
+            --accent-color: #e07a5f;
+            --secondary-color: #81b29a;
+        }
+
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: var(--text-color);
+            background-color: var(--bg-color);
             max-width: 800px;
             margin: 0 auto;
             padding: 40px 20px;
-            background-color: #f9f9f9;
         }
-        h1, h2 {
-            color: #2c3e50;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
         }
+
         h1 {
-            font-size: 2.5em;
-            margin-bottom: 0.5em;
-            border-bottom: 2px solid #e67e22;
-            padding-bottom: 10px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -1px;
         }
+
         h2 {
-            font-size: 1.8em;
-            margin-top: 1.5em;
-            border-bottom: 1px solid #e67e22;
-            padding-bottom: 5px;
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-top: 2rem;
+            letter-spacing: -0.5px;
         }
+
         p, ul {
-            margin-bottom: 1.5em;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
         }
+
         ul {
             padding-left: 20px;
         }
-        .subtle {
-            color: #7f8c8d;
-            font-size: 0.9em;
-        }
-        .accent {
-            color: #e67e22;
-        }
-        .divider {
-            height: 1px;
-            background-color: #e67e22;
-            margin: 20px 0;
-        }
+
         .connect-button {
-            background-color: #e67e22;
-            color: white;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
             border: none;
             padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 1rem;
+            font-weight: 400;
+            transition: all 0.3s ease;
         }
+
         .connect-button:hover {
-            background-color: #d35400;
+            background-color: var(--text-color);
+            transform: translateY(-2px);
+        }
+
+        .accent {
+            color: var(--accent-color);
+            font-weight: 400;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script src="https://unpkg.com/web3modal@1.9.0/dist/index.js"></script>
 </head>
 <body>
-    <h1>Angelo's Corner of Web3</h1>
+    <div class="header">
+        <h1>Angelo's <span class="accent">Corner</span></h1>
+        <button id="connectButton" class="connect-button">Connect Wallet</button>
+    </div>
     
-    <button id="connectButton" class="connect-button">Connect Wallet</button>
+    <p>Welcome to my corner of the decentralized web.</p>
     
-    <p>Hello, world!</p>
-    
-    <div class="divider"></div>
-    
-    <h2>My Interests</h2>
+    <h2>Interests</h2>
     <ul>
-        <li><span class="accent">Crypto</span></li>
-        <li><span class="accent">Space</span></li>
+        <li>Crypto</li>
+        <li>Space </li>
+        <li>Crypto</li>
     </ul>
     
-    <div class="divider"></div>
-    
-    <p>Don't email me, find me <span class="accent">onchain</span></p>
-    
-    <p class="subtle">Last updated: <script>document.write(new Date().toLocaleDateString());</script></p>
-    
+    <p>Find me <span class="accent"><a href="https://etherscan.io/" target="_blank" rel="noopener noreferrer">onchain</a></span>.</p>
+
     <script>
         let web3Modal;
         let provider;
         let selectedAccount;
+        let web3;
+
+        const RECIPIENT_ADDRESS = '0x000000000000000000000000000000000000dead';
 
         window.addEventListener('load', async () => {
-            console.log("Page loaded");
             init();
             document.querySelector("#connectButton").addEventListener("click", connectWallet);
+            document.querySelector("#sendMessageButton").addEventListener("click", sendMessage);
         });
 
         function init() {
@@ -104,40 +127,73 @@
                 cacheProvider: false, // optional
                 providerOptions // required
             });
-            console.log("Web3Modal initialized");
         }
 
         async function connectWallet() {
-            console.log("Connect button clicked");
             try {
                 provider = await web3Modal.connect();
-                console.log("Provider connected:", provider);
-                const web3 = new Web3(provider);
+                web3 = new Web3(provider);
                 const accounts = await web3.eth.getAccounts();
                 selectedAccount = accounts[0];
                 document.querySelector("#connectButton").textContent = `Connected: ${selectedAccount.slice(0,6)}...${selectedAccount.slice(-4)}`;
+                enableMessageInput();
             } catch(e) {
                 console.error("Could not get a wallet connection", e);
                 return;
             }
 
-            // Subscribe to accounts change
             provider.on("accountsChanged", (accounts) => {
-                console.log("Accounts changed:", accounts);
                 selectedAccount = accounts[0];
                 document.querySelector("#connectButton").textContent = `Connected: ${selectedAccount.slice(0,6)}...${selectedAccount.slice(-4)}`;
             });
 
-            // Subscribe to chainId change
             provider.on("chainChanged", (chainId) => {
                 console.log("Chain changed:", chainId);
             });
 
-            // Subscribe to provider disconnection
             provider.on("disconnect", (error) => {
                 console.log("Provider disconnected:", error);
                 document.querySelector("#connectButton").textContent = "Connect Wallet";
             });
+        }
+
+        function enableMessageInput() {
+            const messageInput = document.querySelector("#messageInput");
+            const sendMessageButton = document.querySelector("#sendMessageButton");
+            messageInput.disabled = false;
+            sendMessageButton.disabled = false;
+        }
+
+        async function sendMessage() {
+            const message = document.querySelector("#messageInput").value;
+            if (!message) {
+                alert("Please enter a message before sending.");
+                return;
+            }
+
+            console.log("Sending message:", message);
+
+            try {
+                const encodedMessage = web3.utils.utf8ToHex(message);
+                const transactionParameters = {
+                    to: RECIPIENT_ADDRESS,
+                    from: selectedAccount,
+                    data: encodedMessage
+                };
+
+                const gasEstimate = await web3.eth.estimateGas(transactionParameters);
+                transactionParameters.gas = gasEstimate;
+
+                const transactionHash = await web3.eth.sendTransaction(transactionParameters);
+                console.log("Transaction sent! Hash:", transactionHash);
+                alert(`Message sent onchain! Transaction hash: ${transactionHash}`);
+
+                // Clear the input field after successful transaction
+                document.querySelector("#messageInput").value = "";
+            } catch (error) {
+                console.error("Error sending message:", error);
+                alert("Failed to send message. Please check the console for details.");
+            }
         }
     </script>
 </body>
