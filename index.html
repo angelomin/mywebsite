@@ -6,82 +6,50 @@
     <title>Angelo's Website</title>
     <style>
         body {
-            font-family: "Courier New", Courier, monospace;
-            background-color: #F0E68C;
-            color: #8B4513;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
+            padding: 40px 20px;
+            background-color: #f9f9f9;
         }
         h1, h2 {
-            text-align: center;
-            color: #A0522D;
+            color: #2c3e50;
         }
-        img {
-            display: block;
-            margin: 20px auto;
-            border: 5px solid #DEB887;
-            max-width: 100%;
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
         }
-        .blink {
-            animation: blinker 1s linear infinite;
+        h2 {
+            font-size: 1.8em;
+            margin-top: 1.5em;
         }
-        @keyframes blinker {
-            50% { opacity: 0; }
+        p, ul {
+            margin-bottom: 1.5em;
         }
-        pre {
-            font-family: monospace;
-            font-size: 14px;
-            line-height: 1;
-            text-align: center;
-            color: #8B4513;
+        ul {
+            padding-left: 20px;
         }
-        #typing-text {
-            font-weight: bold;
-            animation: typing 4s steps(20) infinite;
-        }
-        @keyframes typing {
-            0% { content: ''; }
-            25% { content: 'H'; }
-            50% { content: 'He'; }
-            75% { content: 'Hel'; }
-            100% { content: 'Hello'; }
+        .subtle {
+            color: #7f8c8d;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
     <h1>Welcome to my corner of the internet</h1>
-    <img src="https://placekitten.com/300/200" alt="A cute kitten">
-    <h2 class="blink">Under Construction</h2>
+    
     <p>Hello, world! This is my corner of the internet.</p>
-    <p>Here are some of my interests:</p>
+    
+    <h2>My Interests</h2>
     <ul>
         <li>Crypto</li>
-        <li>Crypto</li>
         <li>Space</li>
-        <li>Crypto</li>
     </ul>
-    <p>Don't email me, find me onchain</a></p>
-    <p>Last updated: <script>document.write(new Date().toLocaleDateString());</script></p>
-    <pre>
-      .---.
-     /     \
-    /       \
-   /  ^   ^  \
-  |  (o) (o)  |
-   \    <    /
-    \  ___  /
-     \_____/
-  ____|  |____
- /    \__/    \
-/              \
-\______________/
-    _|____|_
-   /        \
-  /  |    |  \
- /___|____|___\
-<span id="typing-text"></span>
-    </pre>
+    
+    <p>Don't email me, find me onchain</p>
+    
+    <p class="subtle">Last updated: <script>document.write(new Date().toLocaleDateString());</script></p>
 </body>
 </html>
